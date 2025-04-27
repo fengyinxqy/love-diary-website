@@ -116,8 +116,8 @@ const loveEvents = ref([
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/styles/variables';
-@import '@/assets/styles/mixins';
+@use '@/assets/styles/variables';
+@use '@/assets/styles/mixins';
 
 .home {
   width: 100%;
@@ -129,32 +129,32 @@ const loveEvents = ref([
   background:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     url('@/assets/banner-bg.jpg') center/cover no-repeat;
-  @include flex-center;
-  color: $background-color;
+  @include mixins.flex-center;
+  color: variables.$background-color;
   text-align: center;
 
   &-content {
-    padding: $spacing-large;
+    padding: variables.$spacing-large;
   }
 
   &-title {
-    @include heading-1;
-    margin-bottom: $spacing-base;
+    @include mixins.heading-1;
+    margin-bottom: variables.$spacing-base;
   }
 
   &-subtitle {
-    font-size: $font-size-large;
+    font-size: variables.$font-size-large;
     opacity: 0.9;
-    margin-bottom: $spacing-base;
+    margin-bottom: variables.$spacing-base;
   }
 }
 
 .love-time {
-  font-size: $font-size-large;
-  color: $background-color;
+  font-size: variables.$font-size-large;
+  color: variables.$background-color;
   background-color: rgba(0, 0, 0, 0.4);
-  padding: $spacing-base $spacing-large;
-  border-radius: calc($border-radius * 2);
+  padding: variables.$spacing-base variables.$spacing-large;
+  border-radius: calc(variables.$border-radius * 2);
   display: inline-block;
   backdrop-filter: blur(8px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -190,42 +190,44 @@ const loveEvents = ref([
 }
 
 .avatar {
+  & {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid variables.$background-color;
+    box-shadow: variables.$box-shadow-large;
+
+    @include mixins.respond-to(md) {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
   &-container {
-    @include flex-center;
-    gap: $spacing-large;
-    margin-bottom: $spacing-large;
+    @include mixins.flex-center;
+    gap: variables.$spacing-large;
+    margin-bottom: variables.$spacing-large;
   }
 
   &-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: $spacing-base;
+    gap: variables.$spacing-base;
   }
 
   &-name {
-    color: $background-color;
-    font-size: $font-size-large;
+    color: variables.$background-color;
+    font-size: variables.$font-size-large;
     font-weight: 500;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
-
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 4px solid $background-color;
-  box-shadow: $box-shadow-large;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  @include respond-to(md) {
-    width: 100px;
-    height: 100px;
   }
 }
 
@@ -235,37 +237,39 @@ const loveEvents = ref([
 }
 
 .timeline {
-  &-section {
-    padding: $spacing-xlarge $spacing-large;
-    background-color: #f5f5f5;
-  }
+  & {
+    position: relative;
+    max-width: variables.$breakpoint-xl;
+    margin: 0 auto;
 
-  position: relative;
-  max-width: $breakpoint-xl;
-  margin: 0 auto;
+    &::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      background-color: variables.$primary-color;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
 
-  &::after {
-    content: '';
-    position: absolute;
-    width: 4px;
-    background-color: $primary-color;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-
-    @include respond-to(md) {
-      left: 31px;
+      @include mixins.respond-to(md) {
+        left: 31px;
+      }
     }
   }
 
+  &-section {
+    padding: variables.$spacing-xlarge variables.$spacing-large;
+    background-color: #f5f5f5;
+  }
+
   &-item {
-    padding: $spacing-base $spacing-xlarge;
+    padding: variables.$spacing-base variables.$spacing-xlarge;
     position: relative;
     width: 50%;
     opacity: 0;
     transform: translateY(20px);
-    animation: fade-in $animation-duration ease forwards;
+    animation: fade-in variables.$animation-duration ease forwards;
 
     &.left {
       left: 0;
@@ -275,10 +279,10 @@ const loveEvents = ref([
       left: 50%;
     }
 
-    @include respond-to(md) {
+    @include mixins.respond-to(md) {
       width: 100%;
       padding-left: 70px;
-      padding-right: $spacing-large;
+      padding-right: variables.$spacing-large;
 
       &.right {
         left: 0;
@@ -287,21 +291,21 @@ const loveEvents = ref([
   }
 
   &-content {
-    @include card;
+    @include mixins.card;
 
     .date {
-      color: $primary-color;
+      color: variables.$primary-color;
       font-weight: bold;
-      margin-bottom: $spacing-base;
+      margin-bottom: variables.$spacing-base;
     }
 
     .title {
-      color: $secondary-color;
-      margin-bottom: $spacing-base;
+      color: variables.$secondary-color;
+      margin-bottom: variables.$spacing-base;
     }
 
     .description {
-      color: $light-text-color;
+      color: variables.$light-text-color;
       line-height: 1.6;
     }
 
@@ -309,8 +313,8 @@ const loveEvents = ref([
       width: 100%;
       height: 200px;
       object-fit: cover;
-      border-radius: $border-radius;
-      margin-top: $spacing-base;
+      border-radius: variables.$border-radius;
+      margin-top: variables.$spacing-base;
     }
   }
 }
