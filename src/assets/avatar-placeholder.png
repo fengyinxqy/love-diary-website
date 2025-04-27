@@ -1,0 +1,263 @@
+iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAADsQAAA7EB9YPtSQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAQbSURBVHic7d0/bxNXHMfx73N2nDi2ExJCCCEBIUCqqEBq1YWlDF3KwsLWpX0DfQPt1oWtG2JhYWFAQqJIVYUEqKCCQAk4IcEhiRPbsc+9LgJaWoX4uZ/vzv59pBEK0t3nu7vce/7dOQARERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERER<thinking>
+我看到 HomeView.vue 目前是一个基础模板。让我们来创建一个优雅的首页布局：
+
+1. 创建一个大型 banner 组件，包含：
+   - 背景图片
+   - 两个人的头像（圆形布局）
+   - 一句浪漫的标语
+
+2. 设计时间线组件，包含：
+   - 垂直时间轴
+   - 交替显示的时间节点
+   - 每个节点包含日期、标题和描述
+   - 优雅的动画效果
+
+我们先修改 HomeView.vue 文件，添加基本结构和样式。
+</thinking>
+
+<write_to_file>
+<path>src/views/home/HomeView.vue</path>
+<content>
+<template>
+  <div class="home">
+    <!-- Banner Section -->
+    <section class="banner">
+      <div class="banner-content">
+        <div class="avatar-container">
+          <div class="avatar avatar-left">
+            <img src="@/assets/boy-avatar.jpg" alt="Boy Avatar" />
+          </div>
+          <div class="heart-icon">❤️</div>
+          <div class="avatar avatar-right">
+            <img src="@/assets/girl-avatar.jpg" alt="Girl Avatar" />
+          </div>
+        </div>
+        <h1 class="banner-title">Our Love Story</h1>
+        <p class="banner-subtitle">记录我们的每一个甜蜜瞬间</p>
+      </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="timeline-section">
+      <h2 class="section-title">我们的故事</h2>
+      <div class="timeline">
+        <div class="timeline-item" v-for="(item, index) in timelineData" :key="index">
+          <div class="timeline-content" :class="{ 'left': index % 2 === 0, 'right': index % 2 === 1 }">
+            <div class="timeline-date">{{ item.date }}</div>
+            <h3 class="timeline-title">{{ item.title }}</h3>
+            <p class="timeline-description">{{ item.description }}</p>
+            <img v-if="item.image" :src="item.image" :alt="item.title" class="timeline-image" />
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const timelineData = ref([
+  {
+    date: '2023-01-01',
+    title: '我们的相遇',
+    description: '在这个特别的日子，我们的故事开始了...',
+    image: '@/assets/first-meet.jpg'
+  },
+  {
+    date: '2023-02-14',
+    title: '第一个情人节',
+    description: '一起度过了浪漫的情人节，留下了美好的回忆...',
+    image: '@/assets/valentine.jpg'
+  },
+  {
+    date: '2023-05-20',
+    title: '第一次旅行',
+    description: '我们一起去了向往已久的地方，看到了最美的风景...',
+    image: '@/assets/travel.jpg'
+  }
+])
+</script>
+
+<style scoped>
+.home {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Banner Styles */
+.banner {
+  height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+              url('@/assets/banner-bg.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.banner-content {
+  padding: 2rem;
+}
+
+.avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heart-icon {
+  font-size: 2rem;
+  animation: pulse 1.5s infinite;
+}
+
+.banner-title {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.banner-subtitle {
+  font-size: 1.5rem;
+  opacity: 0.9;
+}
+
+/* Timeline Styles */
+.timeline-section {
+  padding: 4rem 2rem;
+  background-color: #f5f5f5;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #333;
+}
+
+.timeline {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.timeline::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  background-color: #ff69b4;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.timeline-item {
+  padding: 10px 40px;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.timeline-content {
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  width: calc(50% - 40px);
+}
+
+.timeline-content.left {
+  float: left;
+}
+
+.timeline-content.right {
+  float: right;
+}
+
+.timeline-date {
+  color: #ff69b4;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-title {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.timeline-description {
+  color: #666;
+  line-height: 1.6;
+}
+
+.timeline-image {
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .banner-title {
+    font-size: 2.5rem;
+  }
+
+  .banner-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .timeline::after {
+    left: 31px;
+  }
+
+  .timeline-content {
+    width: 100%;
+    padding-left: 70px;
+    padding-right: 25px;
+  }
+
+  .timeline-content.left,
+  .timeline-content.right {
+    float: none;
+  }
+}
+</style>

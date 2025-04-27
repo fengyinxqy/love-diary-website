@@ -8,6 +8,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
 import 'reset-css'
+import '@/assets/styles/main.scss'
 
 const app = createApp(App)
 
