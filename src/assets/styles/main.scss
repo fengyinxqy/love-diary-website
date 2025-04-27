@@ -1,7 +1,7 @@
 // Import variables and mixins
-@import './variables';
-@import './mixins';
-@import './reset';
+@use 'variables';
+@use 'mixins';
+@use 'reset';
 
 // Global animations
 @keyframes fade-in {
@@ -28,9 +28,9 @@
 
 // Global utility classes
 .container {
-  max-width: $breakpoint-xl;
+  max-width: variables.$breakpoint-xl;
   margin: 0 auto;
-  padding: 0 $spacing-base;
+  padding: 0 variables.$spacing-base;
 }
 
 .text-center {
@@ -38,9 +38,9 @@
 }
 
 .fade-enter-active {
-  animation: fade-in $animation-duration;
+  animation: fade-in variables.$animation-duration;
 }
 
 .scale-enter-active {
-  animation: scale-in $animation-duration;
+  animation: scale-in variables.$animation-duration;
 }

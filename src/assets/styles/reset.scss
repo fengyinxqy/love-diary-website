@@ -1,3 +1,6 @@
+@use "mixins";
+@use "variables";
+
 /* Reset CSS */
 *,
 *::before,
@@ -8,18 +11,18 @@
 }
 
 html {
-  font-size: $font-size-base;
+  font-size: variables.$font-size-base;
 
-  @include respond-to(md) {
+  @include mixins.respond-to(md) {
     font-size: 14px;
   }
 }
 
 body {
-  font-family: $font-family-base;
+  font-family: variables.$font-family-base;
   line-height: 1.6;
-  color: $text-color;
-  background-color: $background-color;
+  color: variables.$text-color;
+  background-color: variables.$background-color;
 }
 
 a {

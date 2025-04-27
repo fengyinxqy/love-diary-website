@@ -4,22 +4,29 @@
     <section class="banner">
       <div class="banner-content">
         <div class="avatar-container">
-          <div class="avatar avatar-left">
-            <img
-              src="@/assets/avatar-placeholder.png"
-              alt="Ta"
-            />
+          <div class="avatar-wrapper">
+            <div class="avatar avatar-left">
+              <img
+                src="@/assets/images/qingqing.jpg"
+                alt="Ta"
+              />
+            </div>
+            <div class="avatar-name">青青</div>
           </div>
           <div class="love-icon">❤️</div>
-          <div class="avatar avatar-right">
-            <img
-              src="@/assets/avatar-placeholder.png"
-              alt="我"
-            />
+          <div class="avatar-wrapper">
+            <div class="avatar avatar-right">
+              <img
+                src="@/assets/images/qiyan.jpg"
+                alt="我"
+              />
+            </div>
+            <div class="avatar-name">祺彦</div>
           </div>
         </div>
         <h1 class="banner-title">Our Love Story</h1>
         <p class="banner-subtitle">记录我们的每一个甜蜜瞬间</p>
+        <p class="love-time">{{ loveTime }}</p>
       </div>
     </section>
 
@@ -51,7 +58,40 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+
+dayjs.extend(duration)
+
+const loveTime = ref('')
+const startDate = '2023-01-01'
+
+const updateLoveTime = () => {
+  const start = dayjs(startDate)
+  const now = dayjs()
+  const diff = dayjs.duration(now.diff(start))
+
+  const days = Math.floor(diff.asDays())
+  const hours = diff.hours()
+  const minutes = diff.minutes()
+  const seconds = diff.seconds()
+
+  loveTime.value = `已在一起 ${days} 天 ${hours} 时 ${minutes} 分 ${seconds} 秒`
+}
+
+let timer: number
+
+onMounted(() => {
+  updateLoveTime()
+  timer = window.setInterval(updateLoveTime, 1000)
+})
+
+onUnmounted(() => {
+  if (timer) {
+    clearInterval(timer)
+  }
+})
 
 const loveEvents = ref([
   {
@@ -105,6 +145,47 @@ const loveEvents = ref([
   &-subtitle {
     font-size: $font-size-large;
     opacity: 0.9;
+    margin-bottom: $spacing-base;
+  }
+}
+
+.love-time {
+  font-size: $font-size-large;
+  color: $background-color;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: $spacing-base $spacing-large;
+  border-radius: calc($border-radius * 2);
+  display: inline-block;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: fade-in 0.8s ease-out;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -113,6 +194,20 @@ const loveEvents = ref([
     @include flex-center;
     gap: $spacing-large;
     margin-bottom: $spacing-large;
+  }
+
+  &-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-base;
+  }
+
+  &-name {
+    color: $background-color;
+    font-size: $font-size-large;
+    font-weight: 500;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   width: 150px;
