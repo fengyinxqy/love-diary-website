@@ -30,37 +30,70 @@
       </div>
     </section>
 
-    <!-- Timeline Section -->
-    <section class="timeline-section">
-      <h2 class="section-title">我们的时光</h2>
-      <div class="timeline">
-        <div
-          v-for="(event, index) in loveEvents"
-          :key="index"
-          class="timeline-item"
-          :class="{ left: index % 2 === 0, right: index % 2 === 1 }"
+    <!-- Navigation Cards -->
+    <section class="navigation-cards">
+      <el-row :gutter="30">
+        <el-col
+          :xs="24"
+          :sm="24"
+          :md="8"
+          :lg="8"
+          v-for="card in cards"
+          :key="card.path"
+          class="nav-col"
         >
-          <div class="timeline-content">
-            <div class="date">{{ event.date }}</div>
-            <h3 class="title">{{ event.title }}</h3>
-            <p class="description">{{ event.description }}</p>
-            <img
-              v-if="event.image"
-              :src="event.image"
-              :alt="event.title"
-              class="event-image"
-            />
-          </div>
-        </div>
+          <el-card
+            shadow="hover"
+            class="nav-card"
+            @click="router.push(card.path)"
+          >
+            <div class="card-content">
+              <div class="card-icon">
+                <el-icon :size="40">
+                  <component :is="card.icon" />
+                </el-icon>
+              </div>
+              <h3>{{ card.title }}</h3>
+              <p>{{ card.description }}</p>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </section>
+
+    <!-- Timeline Preview -->
+    <section class="timeline-preview">
+      <h2 class="section-title">我们的时光</h2>
+      <div class="preview-events">
+        <el-card
+          v-for="(event, index) in loveEvents.slice(0, 3)"
+          :key="index"
+          class="preview-event"
+          @click="router.push('/timeline')"
+        >
+          <div class="event-date">{{ event.date }}</div>
+          <h3 class="event-title">{{ event.title }}</h3>
+          <p class="event-description">{{ event.description }}</p>
+        </el-card>
       </div>
+      <el-button
+        type="primary"
+        plain
+        @click="router.push('/timeline')"
+        class="view-more"
+      >
+        查看全部时光记录
+      </el-button>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed, shallowReactive } from 'vue'
+import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+import { Clock, ChatDotRound, Picture } from '@element-plus/icons-vue'
 
 dayjs.extend(duration)
 
@@ -93,6 +126,29 @@ onUnmounted(() => {
   }
 })
 
+const router = useRouter()
+
+const cards = shallowReactive([
+  {
+    title: '时光轴',
+    description: '记录我们的每一个重要时刻',
+    icon: Clock,
+    path: '/timeline',
+  },
+  {
+    title: '留言板',
+    description: '朋友们的祝福和留言',
+    icon: ChatDotRound,
+    path: '/guestbook',
+  },
+  {
+    title: '恋爱相册',
+    description: '珍藏我们的美好回忆',
+    icon: Picture,
+    path: '/gallery',
+  },
+])
+
 const loveEvents = ref([
   {
     date: '2023-01-01',
@@ -122,6 +178,42 @@ const loveEvents = ref([
 .home {
   width: 100%;
   min-height: 100vh;
+  background-color: #fff;
+
+  section {
+    position: relative;
+    overflow: hidden;
+
+    &:not(:last-child) {
+      margin-bottom: 0;
+    }
+
+    &.banner {
+      position: relative;
+      z-index: 1;
+    }
+
+    &.navigation-cards {
+      position: relative;
+      z-index: 2;
+      padding-top: 100px;
+      padding-bottom: 80px;
+    }
+
+    &.timeline-preview {
+      position: relative;
+      z-index: 1;
+      margin-top: 0;
+      background-color: #f9f9f9;
+    }
+  }
+}
+
+// 调整 banner 内容的位置以适应新的布局
+.banner {
+  &-content {
+    padding-bottom: 100px;
+  }
 }
 
 .banner {
@@ -146,6 +238,99 @@ const loveEvents = ref([
     font-size: variables.$font-size-large;
     opacity: 0.9;
     margin-bottom: variables.$spacing-base;
+  }
+}
+
+.navigation-cards {
+  padding: 60px 20px;
+  background-color: #fff;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .el-row {
+    justify-content: center;
+    margin: -15px;
+    width: calc(100% + 30px);
+  }
+
+  .nav-col {
+    padding: 15px;
+    display: flex;
+  }
+
+  .nav-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 260px;
+    flex: 1;
+    margin: 0;
+    border: 1px solid #ebeef5;
+
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-content {
+      text-align: center;
+      padding: 40px 24px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+
+      .card-icon {
+        margin-bottom: 24px;
+        color: var(--el-color-primary);
+        background-color: rgba(var(--el-color-primary-rgb), 0.1);
+        width: 80px;
+        height: 80px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      h3 {
+        margin: 0 0 16px;
+        font-size: 20px;
+        color: #2c3e50;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 0;
+        color: #606266;
+        font-size: 14px;
+        line-height: 1.6;
+        max-width: 240px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 40px 20px;
+
+    .nav-card {
+      height: 220px;
+
+      .card-content {
+        padding: 30px 20px;
+
+        .card-icon {
+          width: 64px;
+          height: 64px;
+          margin-bottom: 20px;
+        }
+
+        h3 {
+          font-size: 18px;
+          margin-bottom: 12px;
+        }
+      }
+    }
   }
 }
 
@@ -236,85 +421,108 @@ const loveEvents = ref([
   animation: heartbeat 1.5s infinite;
 }
 
-.timeline {
-  & {
-    position: relative;
-    max-width: variables.$breakpoint-xl;
-    margin: 0 auto;
+.timeline-preview {
+  padding: 60px 20px;
+  background-color: #f9f9f9;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
 
-    &::after {
-      content: '';
-      position: absolute;
-      width: 4px;
-      background-color: variables.$primary-color;
-      top: 0;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-
-      @include mixins.respond-to(md) {
-        left: 31px;
-      }
-    }
+  .section-title {
+    margin-bottom: 40px;
+    font-size: 28px;
+    color: #2c3e50;
+    font-weight: 600;
   }
 
-  &-section {
-    padding: variables.$spacing-xlarge variables.$spacing-large;
-    background-color: #f5f5f5;
+  .preview-events {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: -15px;
+    width: calc(100% + 30px);
   }
 
-  &-item {
-    padding: variables.$spacing-base variables.$spacing-xlarge;
-    position: relative;
-    width: 50%;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fade-in variables.$animation-duration ease forwards;
+  .preview-event {
+    width: calc(33.333% - 30px);
+    margin: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid #ebeef5;
+    min-width: 300px;
 
-    &.left {
-      left: 0;
+    @media (max-width: 1024px) {
+      width: calc(50% - 30px);
     }
 
-    &.right {
-      left: 50%;
-    }
-
-    @include mixins.respond-to(md) {
+    @media (max-width: 768px) {
       width: 100%;
-      padding-left: 70px;
-      padding-right: variables.$spacing-large;
-
-      &.right {
-        left: 0;
-      }
-    }
-  }
-
-  &-content {
-    @include mixins.card;
-
-    .date {
-      color: variables.$primary-color;
-      font-weight: bold;
-      margin-bottom: variables.$spacing-base;
+      margin: 10px 15px;
     }
 
-    .title {
-      color: variables.$secondary-color;
-      margin-bottom: variables.$spacing-base;
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
     }
 
-    .description {
-      color: variables.$light-text-color;
+    .el-card__body {
+      padding: 24px;
+    }
+
+    .event-date {
+      color: var(--el-color-primary);
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 14px;
+      display: inline-block;
+      padding: 4px 12px;
+      background-color: rgba(var(--el-color-primary-rgb), 0.1);
+      border-radius: 4px;
+    }
+
+    .event-title {
+      color: #2c3e50;
+      margin: 12px 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .event-description {
+      color: #606266;
       line-height: 1.6;
+      font-size: 14px;
+      display: -webkit-box;
+      line-clamp: 3;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin: 0;
+    }
+  }
+
+  .view-more {
+    margin-top: 40px;
+    padding: 12px 36px;
+    font-size: 16px;
+    height: auto;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(var(--el-color-primary-rgb), 0.2);
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 40px 20px;
+
+    .section-title {
+      font-size: 24px;
+      margin-bottom: 30px;
     }
 
-    .event-image {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: variables.$border-radius;
-      margin-top: variables.$spacing-base;
+    .preview-events {
+      margin: -10px;
+      width: calc(100% + 20px);
     }
   }
 }
