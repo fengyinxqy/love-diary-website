@@ -3,6 +3,15 @@
     <!-- Banner Section -->
     <section class="banner">
       <div class="banner-content">
+        <el-button
+          v-if="!authStore.isAuthenticated"
+          class="login-btn"
+          type="primary"
+          plain
+          @click="showAuthDialog = true"
+        >
+          登录/注册
+        </el-button>
         <div class="avatar-container">
           <div class="avatar-wrapper">
             <div class="avatar avatar-left">
@@ -29,6 +38,8 @@
         <p class="love-time">{{ loveTime }}</p>
       </div>
     </section>
+
+    <AuthDialog v-model="showAuthDialog" />
 
     <!-- Navigation Cards -->
     <section class="navigation-cards">
@@ -94,11 +105,15 @@ import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { Clock, ChatDotRound, Picture } from '@element-plus/icons-vue'
+import AuthDialog from '@/components/AuthDialog.vue'
+import { useAuthStore } from '@/stores/auth'
 
 dayjs.extend(duration)
 
 const loveTime = ref('')
 const startDate = '2023-01-01'
+const showAuthDialog = ref(false)
+const authStore = useAuthStore()
 
 const updateLoveTime = () => {
   const start = dayjs(startDate)
@@ -223,6 +238,22 @@ const loveEvents = ref([
   @include mixins.flex-center;
   color: variables.$background-color;
   text-align: center;
+  position: relative;
+
+  .login-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: variables.$background-color;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
 
   &-content {
     padding: variables.$spacing-large;
