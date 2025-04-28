@@ -219,8 +219,8 @@ const loveEvents = ref([
 .banner {
   height: 100vh;
   background:
-    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url('@/assets/banner-bg.jpg') center/cover no-repeat;
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6)),
+    url('@/assets/images/banner.png') center/cover no-repeat;
   @include mixins.flex-center;
   color: variables.$background-color;
   text-align: center;
@@ -422,17 +422,49 @@ const loveEvents = ref([
 }
 
 .timeline-preview {
-  padding: 60px 20px;
-  background-color: #f9f9f9;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f5 100%);
   text-align: center;
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.05) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
 
   .section-title {
-    margin-bottom: 40px;
-    font-size: 28px;
+    margin-bottom: 48px;
+    font-size: 32px;
     color: #2c3e50;
-    font-weight: 600;
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--el-color-primary), #ff6b6b);
+      border-radius: 2px;
+    }
   }
 
   .preview-events {
@@ -447,9 +479,14 @@ const loveEvents = ref([
     width: calc(33.333% - 30px);
     margin: 15px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid #ebeef5;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: none;
+    border-radius: 12px;
     min-width: 300px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
 
     @media (max-width: 1024px) {
       width: calc(50% - 30px);
@@ -461,42 +498,113 @@ const loveEvents = ref([
     }
 
     &:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+      transform: translateY(-8px);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+
+      &::after {
+        opacity: 1;
+      }
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--el-color-primary), #ff6b6b);
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
     }
 
     .el-card__body {
-      padding: 24px;
+      padding: 28px;
     }
 
     .event-date {
       color: var(--el-color-primary);
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       font-size: 14px;
       display: inline-block;
-      padding: 4px 12px;
+      padding: 6px 16px;
       background-color: rgba(var(--el-color-primary-rgb), 0.1);
-      border-radius: 4px;
+      border-radius: 16px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(var(--el-color-primary-rgb), 0.2), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(var(--el-color-primary-rgb), 0.1);
+
+        &::after {
+          opacity: 1;
+        }
+      }
     }
 
     .event-title {
       color: #2c3e50;
-      margin: 12px 0;
-      font-size: 18px;
-      font-weight: 600;
+      margin: 16px 0;
+      font-size: 20px;
+      font-weight: 700;
+      transition: color 0.3s ease;
+      position: relative;
+      padding-bottom: 8px;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 2px;
+        background: rgba(var(--el-color-primary-rgb), 0.3);
+        transition: all 0.3s ease;
+      }
     }
 
     .event-description {
       color: #606266;
-      line-height: 1.6;
-      font-size: 14px;
+      line-height: 1.7;
+      font-size: 15px;
       display: -webkit-box;
       line-clamp: 3;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      margin: 0;
+      margin: 16px 0 0;
+      transition: color 0.3s ease;
+    }
+
+    &:hover {
+      .event-title {
+        color: var(--el-color-primary);
+
+        &::after {
+          width: 60px;
+          background: var(--el-color-primary);
+        }
+      }
+
+      .event-description {
+        color: #303133;
+      }
     }
   }
 
