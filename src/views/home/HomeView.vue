@@ -13,28 +13,30 @@
           登录/注册
         </el-button>
         <div class="avatar-container">
-          <div class="avatar-wrapper">
-            <div class="avatar avatar-left">
-              <img
-                src="@/assets/images/qingqing.jpg"
-                alt="Ta"
-              />
+          <div class="couple-names">
+            <div class="avatar-wrapper">
+              <div class="avatar avatar-left">
+                <img
+                  src="@/assets/images/qingqing.jpg"
+                  :alt="settings.girlName"
+                />
+              </div>
+              <div class="avatar-name">{{ settings.girlName }}</div>
             </div>
-            <div class="avatar-name">青青</div>
-          </div>
-          <div class="love-icon">❤️</div>
-          <div class="avatar-wrapper">
-            <div class="avatar avatar-right">
-              <img
-                src="@/assets/images/qiyan.jpg"
-                alt="我"
-              />
+            <div class="love-icon">❤️</div>
+            <div class="avatar-wrapper">
+              <div class="avatar avatar-right">
+                <img
+                  src="@/assets/images/qiyan.jpg"
+                  :alt="settings.boyName"
+                />
+              </div>
+              <div class="avatar-name">{{ settings.boyName }}</div>
             </div>
-            <div class="avatar-name">祺彦</div>
           </div>
         </div>
         <h1 class="banner-title">Our Love Story</h1>
-        <p class="banner-subtitle">记录我们的每一个甜蜜瞬间</p>
+        <p class="banner-subtitle">{{ settings.description }}</p>
         <p class="love-time">{{ loveTime }}</p>
       </div>
     </section>
@@ -107,16 +109,33 @@ import duration from 'dayjs/plugin/duration'
 import { Clock, ChatDotRound, Picture } from '@element-plus/icons-vue'
 import AuthDialog from '@/components/AuthDialog.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useSettingsStore } from '@/stores/settings'
 
 dayjs.extend(duration)
 
 const loveTime = ref('')
-const startDate = '2023-01-01'
 const showAuthDialog = ref(false)
 const authStore = useAuthStore()
+const settingsStore = useSettingsStore()
+const settings = ref({
+  boyName: '祺彦',
+  girlName: '青青',
+  togetherDate: '2023-01-01',
+  description: '记录我们的每一个甜蜜瞬间',
+})
+
+// 加载网站设置
+const loadSettings = async () => {
+  try {
+    const data = await settingsStore.fetchSettings()
+    settings.value = data
+  } catch (error) {
+    console.error('加载网站设置失败:', error)
+  }
+}
 
 const updateLoveTime = () => {
-  const start = dayjs(startDate)
+  const start = dayjs(settings.value.togetherDate)
   const now = dayjs()
   const diff = dayjs.duration(now.diff(start))
 
@@ -130,7 +149,8 @@ const updateLoveTime = () => {
 
 let timer: number
 
-onMounted(() => {
+onMounted(async () => {
+  await loadSettings()
   updateLoveTime()
   timer = window.setInterval(updateLoveTime, 1000)
 })
@@ -230,6 +250,32 @@ const loveEvents = ref([
   }
 }
 
+.couple-names {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.love-icon {
+  font-size: 24px;
+  margin: 0 10px;
+}
+
 .banner {
   height: 100vh;
   background:
@@ -241,17 +287,24 @@ const loveEvents = ref([
   position: relative;
 
   .login-btn {
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 10;
-    backdrop-filter: blur(8px);
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
     color: variables.$background-color;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
   }
 
@@ -405,32 +458,38 @@ const loveEvents = ref([
 }
 
 .avatar {
-  & {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 4px solid variables.$background-color;
-    box-shadow: variables.$box-shadow-large;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 
-    @include mixins.respond-to(md) {
-      width: 100px;
-      height: 100px;
-    }
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
   }
 
-  &-container {
-    @include mixins.flex-center;
-    gap: variables.$spacing-large;
-    margin-bottom: variables.$spacing-large;
+  @include mixins.respond-to(md) {
+    width: 100px;
+    height: 100px;
   }
+}
 
-  &-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: variables.$spacing-base;
-  }
+.avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 
   &-name {
     color: variables.$background-color;
