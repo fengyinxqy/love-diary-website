@@ -10,23 +10,32 @@ const api = axios.create({
 })
 
 // 请求拦截器
-api.interceptors.request.use(config => {
-  const authStore = useAuthStore()
-  if (authStore.user?.token) {
-    config.headers.Authorization = `Bearer ${authStore.user.token}`
+api.interceptors.request.use(
+  config => {
+    const authStore = useAuthStore()
+    if (authStore.user?.token) {
+      config.headers.Authorization = `Bearer ${authStore.user.token}`
+    }
+    return config
+  },
+  error => {
+    return Promise.reject(error)
   }
-  return config
-})
+)
 
 // 响应拦截器
 api.interceptors.response.use(
   response => response.data,
   error => {
-    if (error.response) {
-      const message = error.response.data?.message || error.message
-      return Promise.reject(new Error(message))
+    const authStore = useAuthStore()
+
+    if (error.response?.status === 401) {
+      // 清除用户信息并重新加载页面
+      authStore.logout()
     }
-    return Promise.reject(error)
+
+    const message = error.response?.data?.message || error.message
+    return Promise.reject(new Error(message))
   }
 )
 

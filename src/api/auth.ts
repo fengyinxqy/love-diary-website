@@ -3,15 +3,15 @@ import type { LoginParams, RegisterParams, AuthResponse, User } from '@/types/au
 
 export const authApi = {
   login(params: LoginParams): Promise<AuthResponse> {
-    return api.post('/auth/login', params)
+    return api.post('/api/auth/login', params)
   },
   register(params: RegisterParams): Promise<AuthResponse> {
-    return api.post('/auth/register', params)
+    return api.post('/api/auth/register', params)
   },
   logout(): Promise<void> {
-    return api.post('/auth/logout')
+    return api.post('/api/auth/logout')
   },
   getProfile(): Promise<User> {
-    return api.get('/auth/me')
+    return api.get('/api/auth/me')
   }
 }

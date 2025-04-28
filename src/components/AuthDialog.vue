@@ -13,23 +13,23 @@
       @submit.prevent="submitForm"
     >
       <el-form-item
-        v-if="!isLoginMode"
         label="用户名"
-        prop="name"
+        prop="username"
       >
         <el-input
-          v-model="form.name"
+          v-model="form.username"
           placeholder="请输入用户名"
         />
       </el-form-item>
 
       <el-form-item
+        v-if="!isLoginMode"
         label="邮箱"
         prop="email"
       >
         <el-input
           v-model="form.email"
-          placeholder="请输入邮箱"
+          placeholder="请输入邮箱（选填）"
         />
       </el-form-item>
 
@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-// import { authApi } from '@/api/auth'
+import type { LoginParams, RegisterParams } from '@/types/auth'
 
 const props = defineProps({
   modelValue: {
@@ -88,17 +88,14 @@ const formRef = ref()
 const isLoginMode = ref(true)
 
 const form = reactive({
-  name: '',
+  username: '',
   email: '',
   password: '',
 })
 
 const rules = {
-  name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' },
-  ],
+  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  email: [{ required: false, type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' }],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 6, message: '密码长度不能少于6位', trigger: 'blur' },
@@ -113,6 +110,7 @@ const visible = computed({
 const toggleMode = () => {
   isLoginMode.value = !isLoginMode.value
   formRef.value?.resetFields()
+  authStore.error = null
 }
 
 const handleClose = () => {
@@ -124,12 +122,21 @@ const handleClose = () => {
 const submitForm = async () => {
   try {
     await formRef.value.validate()
-    const { email, password, name } = form
+    const { username, password, email } = form
 
     if (isLoginMode.value) {
-      await authStore.login(email, password)
+      const loginParams: LoginParams = {
+        username,
+        password,
+      }
+      await authStore.login(loginParams)
     } else {
-      await authStore.register({ name, email, password })
+      const registerParams: RegisterParams = {
+        username,
+        password,
+        ...(email ? { email } : {}),
+      }
+      await authStore.register(registerParams)
     }
 
     handleClose()

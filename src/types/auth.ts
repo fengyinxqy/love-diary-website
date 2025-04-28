@@ -1,21 +1,26 @@
-export interface User {
-  id: number
-  name: string
-  email: string
-  token?: string
-  avatar?: string
-}
-
 export interface LoginParams {
-  email: string
+  username: string
   password: string
 }
 
-export interface RegisterParams extends LoginParams {
-  name: string
+export interface RegisterParams {
+  username: string
+  password: string
+  email?: string
+}
+
+export interface User {
+  id: number
+  username: string
+  email?: string
+  avatar?: string
+  token: string
 }
 
 export interface AuthResponse {
-  user: User
-  token: string
+  data: User
+}
+
+export interface AuthResponse {
+  data: User
 }
