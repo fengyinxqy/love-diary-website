@@ -3,15 +3,6 @@
     <!-- Banner Section -->
     <section class="banner">
       <div class="banner-content">
-        <el-button
-          v-if="!authStore.isAuthenticated"
-          class="login-btn"
-          type="primary"
-          plain
-          @click="showAuthDialog = true"
-        >
-          登录/注册
-        </el-button>
         <div class="avatar-container">
           <div class="couple-names">
             <div class="avatar-wrapper">
@@ -40,8 +31,6 @@
         <p class="love-time">{{ loveTime }}</p>
       </div>
     </section>
-
-    <AuthDialog v-model="showAuthDialog" />
 
     <!-- Navigation Cards -->
     <section class="navigation-cards">
@@ -107,15 +96,11 @@ import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { Clock, ChatDotRound, Picture } from '@element-plus/icons-vue'
-import AuthDialog from '@/components/AuthDialog.vue'
-import { useAuthStore } from '@/stores/auth'
 import { useSettingsStore } from '@/stores/settings'
 
 dayjs.extend(duration)
 
 const loveTime = ref('')
-const showAuthDialog = ref(false)
-const authStore = useAuthStore()
 const settingsStore = useSettingsStore()
 const settings = ref({
   boyName: '祺彦',
@@ -128,7 +113,7 @@ const settings = ref({
 const loadSettings = async () => {
   try {
     const data = await settingsStore.fetchSettings()
-    settings.value = data
+    settings.value = data.data
   } catch (error) {
     console.error('加载网站设置失败:', error)
   }
@@ -285,28 +270,6 @@ const loveEvents = ref([
   color: variables.$background-color;
   text-align: center;
   position: relative;
-
-  .login-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 100;
-    backdrop-filter: blur(10px);
-    background-color: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.4);
-    color: variables.$background-color;
-    font-weight: 500;
-    padding: 8px 20px;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.25);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-    }
-  }
 
   &-content {
     padding: variables.$spacing-large;

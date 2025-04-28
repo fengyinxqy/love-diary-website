@@ -100,11 +100,11 @@ const rules = {
 onMounted(async () => {
   try {
     const settings = await settingsStore.fetchSettings()
-    form.boyName = settings.boyName
-    form.girlName = settings.girlName
-    form.togetherDate = settings.togetherDate
-    form.description = settings.description
-  } catch (error) {
+    form.boyName = settings.data.boyName
+    form.girlName = settings.data.girlName
+    form.togetherDate = settings.data.togetherDate
+    form.description = settings.data.description
+  } catch {
     ElMessage.error('加载设置失败')
   }
 })

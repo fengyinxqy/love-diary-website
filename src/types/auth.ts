@@ -1,3 +1,5 @@
+import type { ApiResponse } from './api'
+
 export interface LoginParams {
   username: string
   password: string
@@ -17,10 +19,9 @@ export interface User {
   token: string
 }
 
-export interface AuthResponse {
-  data: User
+export interface AuthResponseData {
+  user: User
+  token: string
 }
 
-export interface AuthResponse {
-  data: User
-}
+export type AuthResponse = ApiResponse<AuthResponseData>

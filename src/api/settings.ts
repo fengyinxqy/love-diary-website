@@ -4,11 +4,11 @@ import api from './index'
 export const settingsApi = {
   // 获取网站设置
   async getSettings(): Promise<WebsiteSettings> {
-    return api.get('/settings')
+    return api.get('/api/settings')
   },
 
   // 更新网站设置
   async updateSettings(params: UpdateSettingsParams): Promise<WebsiteSettings> {
-    return api.put('/settings', params)
+    return api.put('/api/settings', params)
   },
 }
