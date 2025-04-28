@@ -135,8 +135,6 @@ const loveEvents = ref([
 
 .timeline-view {
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
   background-color: #f8f9fa;
   min-height: 100vh;
 

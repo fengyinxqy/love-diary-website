@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, shallowReactive } from 'vue'
+import { ref, onMounted, onUnmounted, shallowReactive } from 'vue'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
@@ -204,7 +204,6 @@ const loveEvents = ref([
       position: relative;
       z-index: 1;
       margin-top: 0;
-      background-color: #f9f9f9;
     }
   }
 }
@@ -423,7 +422,6 @@ const loveEvents = ref([
 
 .timeline-preview {
   padding: 80px 20px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f5 100%);
   text-align: center;
   max-width: 1200px;
   margin: 0 auto;
