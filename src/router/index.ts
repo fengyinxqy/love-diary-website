@@ -34,11 +34,42 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      component: () => import('@/views/admin/AdminView.vue'),
+      component: () => import('@/views/admin/AdminLayout.vue'),
       meta: {
         title: '网站管理',
         requiresAuth: true
       },
+      children: [
+        {
+          path: 'timeline',
+          name: 'admin-timeline',
+          component: () => import('@/views/admin/components/TimelineManagement.vue'),
+          meta: { title: '时间轴管理' }
+        },
+        {
+          path: 'album',
+          name: 'admin-album',
+          component: () => import('@/views/admin/components/AlbumManagement.vue'),
+          meta: { title: '相册管理' }
+        },
+        {
+          path: 'message',
+          name: 'admin-message',
+          component: () => import('@/views/admin/components/MessageBoard.vue'),
+          meta: { title: '留言板管理' }
+        },
+        {
+          path: 'site',
+          name: 'admin-site',
+          component: () => import('@/views/admin/components/SiteInfo.vue'),
+          meta: { title: '网站信息管理' }
+        },
+        // 默认重定向到时间轴管理
+        {
+          path: '',
+          redirect: { name: 'admin-timeline' }
+        }
+      ]
     },
   ],
 })

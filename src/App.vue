@@ -1,26 +1,28 @@
 <template>
   <div id="app">
-    <el-menu
-      :router="true"
-      mode="horizontal"
-      :class="['nav-menu', { 'nav-fixed': isHomePage }]"
-    >
-      <el-menu-item index="/">首页</el-menu-item>
-      <el-menu-item index="/timeline">时光轴</el-menu-item>
-      <el-menu-item index="/gallery">恋爱相册</el-menu-item>
-      <el-menu-item index="/guestbook">留言板</el-menu-item>
+    <template v-if="!route.path.startsWith('/admin')">
+      <el-menu
+        :router="true"
+        mode="horizontal"
+        :class="['nav-menu', { 'nav-fixed': isHomePage }]"
+      >
+        <el-menu-item index="/">首页</el-menu-item>
+        <el-menu-item index="/timeline">时光轴</el-menu-item>
+        <el-menu-item index="/gallery">恋爱相册</el-menu-item>
+        <el-menu-item index="/guestbook">留言板</el-menu-item>
 
-      <!-- 右侧菜单项 -->
-      <div class="right-menu">
-        <template v-if="authStore.isAuthenticated">
-          <el-menu-item index="/admin">网站管理</el-menu-item>
-          <el-menu-item @click="handleLogout">退出登录</el-menu-item>
-        </template>
-        <template v-else>
-          <el-menu-item @click="showAuthDialog = true">登录</el-menu-item>
-        </template>
-      </div>
-    </el-menu>
+        <!-- 右侧菜单项 -->
+        <div class="right-menu">
+          <template v-if="authStore.isAuthenticated">
+            <el-menu-item index="/admin">网站管理</el-menu-item>
+            <el-menu-item @click="handleLogout">退出登录</el-menu-item>
+          </template>
+          <template v-else>
+            <el-menu-item @click="showAuthDialog = true">登录</el-menu-item>
+          </template>
+        </div>
+      </el-menu>
+    </template>
 
     <router-view></router-view>
 
