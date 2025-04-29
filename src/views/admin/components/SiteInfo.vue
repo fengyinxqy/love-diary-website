@@ -77,12 +77,13 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useSettingsStore } from '@/stores/settings'
+import type { SettingsData } from '@/types/settings'
 
 const settingsStore = useSettingsStore()
 const formRef = ref()
 const isSubmitting = ref(false)
 
-const form = reactive({
+const form: SettingsData = reactive({
   boyName: '',
   girlName: '',
   togetherDate: '',

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import router from '@/router'
 import { ref } from 'vue'
 
 const menuItems = ref([
@@ -9,6 +10,11 @@ const menuItems = ref([
 ])
 
 const activeMenu = ref('时间轴')
+
+const handleMenuClick = (item: any) => {
+  activeMenu.value = item.name
+  router.push(item.path)
+}
 </script>
 
 <template>
@@ -26,7 +32,7 @@ const activeMenu = ref('时间轴')
           v-for="item in menuItems"
           :key="item.path"
           :index="item.name"
-          @click="activeMenu = item.name"
+          @click="handleMenuClick(item)"
         >
           {{ item.name }}
         </el-menu-item>

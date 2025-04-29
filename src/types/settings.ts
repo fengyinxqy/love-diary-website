@@ -1,4 +1,4 @@
-interface SettingsData {
+export interface SettingsData {
   boyName: string
   girlName: string
   togetherDate: string
@@ -9,4 +9,3 @@ export interface WebsiteSettings {
   data: SettingsData
 }
 
-export interface UpdateSettingsParams extends WebsiteSettings {}

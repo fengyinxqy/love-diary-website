@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { WebsiteSettings, UpdateSettingsParams } from '@/types/settings'
+import type { WebsiteSettings, SettingsData } from '@/types/settings'
 import { settingsApi } from '@/api/settings'
 
 export const useSettingsStore = defineStore('settings', () => {
@@ -25,7 +25,7 @@ export const useSettingsStore = defineStore('settings', () => {
   }
 
   // 更新设置
-  const updateSettings = async (params: UpdateSettingsParams) => {
+  const updateSettings = async (params: SettingsData) => {
     try {
       isLoading.value = true
       error.value = null
